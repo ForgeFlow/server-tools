@@ -13,7 +13,10 @@ class ChangesetFieldRule(models.Model):
 
     model_id = fields.Many2one(related="field_id.model_id", store=True)
     field_id = fields.Many2one(
-        comodel_name="ir.model.fields", ondelete="cascade", required=True
+        comodel_name="ir.model.fields",
+        ondelete="cascade",
+        required=True,
+        domain=lambda self: [("id", "in", self._domain_changeset_fields().ids)],
     )
     action = fields.Selection(
         selection="_selection_action",
@@ -40,8 +43,7 @@ class ChangesetFieldRule(models.Model):
     active = fields.Boolean(default=True)
 
     def init(self):
-        """Ensure there is at most one rule with source_model_id NULL.
-        """
+        """Ensure there is at most one rule with source_model_id NULL."""
         self.env.cr.execute(
             """
             CREATE UNIQUE INDEX IF NOT EXISTS source_model_null_field_uniq
@@ -61,7 +63,7 @@ class ChangesetFieldRule(models.Model):
 
     @api.model
     def _domain_source_models(self):
-        """ Returns the models for which we can define rules.
+        """Returns the source models for which we can define rules.
 
         Example for submodules (replace by the xmlid of the model):
 
@@ -75,13 +77,52 @@ class ChangesetFieldRule(models.Model):
         return self.env.ref("base.model_res_users")
 
     @api.model
+    def _get_changeset_models(self):
+        """Returns the models for which we can define rules.
+
+        Example for submodules (replace by the xmlid of the model):
+
+        ::
+            models = super()._domain_source_models()
+            return models | self.env.ref('base.model_res_users')
+
+        """
+        return self.env["ir.model"]
+
+    @api.model
+    def _domain_changeset_fields(self):
+        models = self._get_changeset_models()
+        return self.env["ir.model.fields"].search(
+            [
+                ("model_id", "in", models.ids),
+                (
+                    "ttype",
+                    "in",
+                    (
+                        "char",
+                        "selection",
+                        "date",
+                        "datetime",
+                        "float",
+                        "monetary",
+                        "integer",
+                        "text",
+                        "boolean",
+                        "many2one",
+                    ),
+                ),
+                ("readonly", "=", False),
+            ]
+        )
+
+    @api.model
     def _selection_action(self):
         return [("auto", "Auto"), ("validate", "Validate"), ("never", "Never")]
 
     @ormcache(skiparg=1)
     @api.model
     def _get_rules(self, source_model_name, record_model_name):
-        """ Cache rules
+        """Cache rules
 
         Keep only the id of the rules, because if we keep the recordsets
         in the ormcache, we won't be able to browse them once their
@@ -118,7 +159,7 @@ class ChangesetFieldRule(models.Model):
 
     @api.model
     def get_rules(self, source_model_name, record_model_name):
-        """ Return the rules for a model
+        """Return the rules for a model
 
         When a model is specified, it will return the rules for this
         model.  Fields that have no rule for this model will use the

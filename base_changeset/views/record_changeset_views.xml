@@ -14,7 +14,7 @@
                     name="apply"
                     string="Apply"
                     type="object"
-                    icon="fa-plus-circle"
+                    icon="fa-check"
                     states="draft"
                 />
                 <button
@@ -86,7 +86,7 @@
                                     name="apply"
                                     string="Apply"
                                     type="object"
-                                    icon="fa-plus-circle"
+                                    icon="fa-check"
                                     attrs="{'invisible': [('user_can_validate_changeset', '=', False)]}"
                                 />
                                 <button

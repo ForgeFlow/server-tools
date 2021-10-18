@@ -4,56 +4,87 @@
 
 from odoo.tests import common
 
+from .base_changeset_tester import BaseChangesetTester
+from .common import setup_test_model, teardown_test_model
+
 
 class TestChangesetFieldRule(common.TransactionCase):
     def setUp(self):
         super().setUp()
-        self.company_model_id = self.env.ref("base.model_res_company").id
-        self.field_name = self.env.ref("base.field_res_partner__name")
-        self.field_street = self.env.ref("base.field_res_partner__street")
+
+        setup_test_model(self.env, [BaseChangesetTester])
+
+        self.tester_model = self.env["ir.model"].search(
+            [("model", "=", BaseChangesetTester._name)]
+        )
+
+        # Access record:
+        self.env["ir.model.access"].create(
+            {
+                "name": "access.tester",
+                "model_id": self.tester_model.id,
+                "perm_read": 1,
+                "perm_write": 1,
+                "perm_create": 1,
+                "perm_unlink": 1,
+            }
+        )
+
+        # Get fields
+        self.field_char = self.env.ref(
+            "base_changeset.field_base_changeset_tester__test_field_char"
+        )
+        self.field_text = self.env.ref(
+            "base_changeset.field_base_changeset_tester__test_field_txt"
+        )
+
+    def tearDown(self):
+        teardown_test_model(self.env, [BaseChangesetTester])
+        super().tearDown()
 
     def test_get_rules(self):
         ChangesetFieldRule = self.env["changeset.field.rule"]
         ChangesetFieldRule.search([]).unlink()
         rule1 = ChangesetFieldRule.create(
-            {"field_id": self.field_name.id, "action": "validate"}
+            {"field_id": self.field_char.id, "action": "validate"}
         )
         rule2 = ChangesetFieldRule.create(
-            {"field_id": self.field_street.id, "action": "never"}
+            {"field_id": self.field_txt.id, "action": "never"}
         )
-        get_rules = ChangesetFieldRule.get_rules(None, "res.partner")
+        get_rules = ChangesetFieldRule.get_rules(None, "base.changeset.tester")
         self.assertEqual(get_rules, {"name": rule1, "street": rule2})
 
     def test_get_rules_source(self):
         ChangesetFieldRule = self.env["changeset.field.rule"]
         ChangesetFieldRule.search([]).unlink()
         rule1 = ChangesetFieldRule.create(
-            {"field_id": self.field_name.id, "action": "validate"}
+            {"field_id": self.field_char.id, "action": "validate"}
         )
         rule2 = ChangesetFieldRule.create(
-            {"field_id": self.field_street.id, "action": "never"}
+            {"field_id": self.field_txt.id, "action": "never"}
         )
         rule3 = ChangesetFieldRule.create(
             {
                 "source_model_id": self.company_model_id,
-                "field_id": self.field_street.id,
+                "field_id": self.field_txt.id,
                 "action": "never",
             }
         )
         model = ChangesetFieldRule
-        rules = model.get_rules(None, "res.partner")
+        rules = model.get_rules(None, "base.changeset.tester")
         self.assertEqual(rules, {"name": rule1, "street": rule2})
-        rules = model.get_rules("res.company", "res.partner")
+        rules = model.get_rules("res.company", "base.changeset.tester")
         self.assertEqual(rules, {"name": rule1, "street": rule3})
 
     def test_get_rules_cache(self):
         ChangesetFieldRule = self.env["changeset.field.rule"]
         ChangesetFieldRule.search([]).unlink()
         rule = ChangesetFieldRule.create(
-            {"field_id": self.field_name.id, "action": "validate"}
+            {"field_id": self.field_char.id, "action": "validate"}
         )
         self.assertEqual(
-            ChangesetFieldRule.get_rules(None, "res.partner")["name"].action, "validate"
+            ChangesetFieldRule.get_rules(None, "base.changeset.tester")["name"].action,
+            "validate",
         )
         # Write on cursor to bypass the cache invalidation for the
         # matter of the test
@@ -62,11 +93,13 @@ class TestChangesetFieldRule(common.TransactionCase):
             (rule.id,),
         )
         self.assertEqual(
-            ChangesetFieldRule.get_rules(None, "res.partner")["name"].action, "validate"
+            ChangesetFieldRule.get_rules(None, "base.changeset.tester")["name"].action,
+            "validate",
         )
         rule.action = "auto"
         self.assertEqual(
-            ChangesetFieldRule.get_rules(None, "res.partner")["name"].action, "auto"
+            ChangesetFieldRule.get_rules(None, "base.changeset.tester")["name"].action,
+            "auto",
         )
         rule.unlink()
-        self.assertFalse(ChangesetFieldRule.get_rules(None, "res.partner"))
+        self.assertFalse(ChangesetFieldRule.get_rules(None, "base.changeset.tester"))

@@ -1,14 +1,14 @@
 # Copyright 2020 Onestein (<https://www.onestein.eu>)
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from lxml import etree
 
 from odoo import _, api, fields, models
 from odoo.tools import config
 
 
-class Base(models.AbstractModel):
-    _inherit = "base"
+class BaseChangeset(models.AbstractModel):
+    _name = "base.changeset"
+    _description = "Base Changeset (abstract)"
 
     changeset_ids = fields.One2many(
         comodel_name="record.changeset",
@@ -63,11 +63,7 @@ class Base(models.AbstractModel):
         :args:
         :returns: list of models
         """
-        models = self.env["changeset.field.rule"].search([]).mapped("model_id.model")
-        if config["test_enable"] and self.env.context.get("test_record_changeset"):
-            if "res.partner" not in models:
-                models += ["res.partner"]  # Used in tests
-        return models
+        return self.env["changeset.field.rule"].search([]).mapped("model_id.model")
 
     def write(self, values):
         if self.env.context.get("__no_changeset"):
@@ -82,8 +78,17 @@ class Base(models.AbstractModel):
 
         for record in self:
             local_values = self.env["record.changeset"].add_changeset(record, values)
-            super(Base, record).write(local_values)
+            super(BaseChangeset, record).write(local_values)
         return self
+
+    def unlink(self):
+        """Clean created changesets before unlinking."""
+        model_name = self._name
+        for record in self:
+            self.env["record.changeset"].search(
+                [("model", "=", model_name), ("res_id", "=", record.id)]
+            ).unlink()
+        return super().unlink()
 
     def action_record_changeset_change_view(self):
         self.ensure_one()
@@ -114,42 +119,6 @@ class Base(models.AbstractModel):
                     ]
                 }
             )
-        return res
-
-    @api.model
-    def _fields_view_get(
-        self, view_id=None, view_type="form", toolbar=False, submenu=False
-    ):
-        res = super()._fields_view_get(
-            view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu
-        )
-        to_track_changeset = self._name in self.models_to_track_changeset()
-        can_see = len(self) == 1 and self.user_can_see_changeset
-        button_label = _("Changes")
-        if to_track_changeset and can_see and view_type == "form":
-            doc = etree.XML(res["arch"])
-            for node in doc.xpath("//div[@name='button_box']"):
-                xml_field = etree.Element(
-                    "field",
-                    {
-                        "name": "count_pending_changeset_changes",
-                        "string": button_label,
-                        "widget": "statinfo",
-                    },
-                )
-                xml_button = etree.Element(
-                    "button",
-                    {
-                        "type": "object",
-                        "name": "action_record_changeset_change_view",
-                        "icon": "fa-code-fork",
-                        "context": "{'search_default_draft': 1, "
-                        "'search_default_record_id': active_id}",
-                    },
-                )
-                xml_button.insert(0, xml_field)
-                node.insert(0, xml_button)
-            res["arch"] = etree.tostring(doc, encoding="unicode")
         return res
 
     def _compute_user_can_see_changeset(self):

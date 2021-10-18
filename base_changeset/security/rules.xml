@@ -16,4 +16,12 @@
             name="domain_force"
         >['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
     </record>
+    <record id="record_changeset_change_rule" model="ir.rule">
+        <field name="name">Record Changeset Change</field>
+        <field name="model_id" ref="model_record_changeset_change" />
+        <field name="global" eval="True" />
+        <field
+            name="domain_force"
+        >['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
 </odoo>

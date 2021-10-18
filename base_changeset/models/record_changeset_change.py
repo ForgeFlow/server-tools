@@ -122,6 +122,7 @@ class RecordChangesetChange(models.Model):
     modified_by_id = fields.Many2one(related="changeset_id.modified_by_id")
     verified_on_date = fields.Datetime(string="Verified on", readonly=True)
     verified_by_id = fields.Many2one("res.users", readonly=True)
+    company_id = fields.Many2one(related="changeset_id.company_id", store=True)
 
     @api.model
     def _reference_models(self):

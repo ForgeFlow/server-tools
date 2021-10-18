@@ -3,9 +3,27 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 
+def setup_test_model(env, model_clses):
+    for model_cls in model_clses:
+        model_cls._build_model(env.registry, env.cr)
+
+    env.registry.setup_models(env.cr)
+    env.registry.init_models(
+        env.cr,
+        [model_cls._name for model_cls in model_clses],
+        dict(env.context, update_custom_fields=True),
+    )
+
+
+def teardown_test_model(env, model_clses):
+    for model_cls in model_clses:
+        del env.registry.models[model_cls._name]
+    env.registry.setup_models(env.cr)
+
+
 class ChangesetTestCommon(object):
     def assert_changeset(self, record, expected_source, expected_changes):
-        """ Check if a changeset has been created according to expected values
+        """Check if a changeset has been created according to expected values
 
         The record should have no prior changeset than the one created in the
         test (so it has exactly 1 changeset).
@@ -60,7 +78,7 @@ class ChangesetTestCommon(object):
             raise AssertionError("Changes do not match\n\n:%s" % message)
 
     def _create_changeset(self, record, changes):
-        """ Create a changeset and its associated changes
+        """Create a changeset and its associated changes
 
         :param record: 'record' record
         :param changes: list of changes [(field, new value, state)]

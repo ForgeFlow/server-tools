@@ -20,7 +20,7 @@
                     name="apply"
                     string="Apply"
                     type="object"
-                    icon="fa-plus-circle"
+                    icon="fa-check"
                     attrs="{'invisible': [('user_can_validate_changeset', '=', False)]}"
                 />
                 <button
@@ -90,6 +90,11 @@
                     domain="[('state','=','draft')]"
                 />
                 <filter string="Done" name="done" domain="[('state','=','done')]" />
+                <filter
+                    string="Rejected"
+                    name="rejected"
+                    domain="[('state','=','cancel')]"
+                />
                 <group expand="0" string="Group By">
                     <filter
                         string="State"
