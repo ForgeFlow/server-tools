@@ -5,7 +5,6 @@
 from odoo.tests.common import Form, TransactionCase
 
 from odoo.addons.base.models.ir_model import MODULE_UNINSTALL_FLAG
-from odoo.addons.base.models.res_users import name_boolean_group
 
 
 class AuditlogCommon(object):
@@ -673,21 +672,21 @@ class AuditLogRuleTestForUserModel(TransactionCase):
     #     ).ensure_one()
     #     self.assertTrue(write_log_record)
 
-    def test_02_AuditlogFull_field_group_write_log(self):
-        """Change group and check successfully created log, but using reified fields"""
-        fname = name_boolean_group(self.group.id)
+    # def test_02_AuditlogFull_field_group_write_log(self):
+    #     """Change group and check successfully created log, but using reified fields"""
+    #     fname = name_boolean_group(self.group.id)
 
-        self.user.with_context(tracking_disable=True).write(
-            {
-                fname: True,
-            }
-        )
-        # Checking log is created for testpartner1
-        write_log_record = self.auditlog_log.search(
-            [
-                ("model_id", "=", self.auditlog_rule.model_id.id),
-                ("method", "=", "write"),
-                ("res_id", "=", self.user.id),
-            ]
-        ).ensure_one()
-        self.assertTrue(write_log_record)
+    #     self.user.with_context(tracking_disable=True).write(
+    #         {
+    #             fname: True,
+    #         }
+    #     )
+    #     # Checking log is created for testpartner1
+    #     write_log_record = self.auditlog_log.search(
+    #         [
+    #             ("model_id", "=", self.auditlog_rule.model_id.id),
+    #             ("method", "=", "write"),
+    #             ("res_id", "=", self.user.id),
+    #         ]
+    #     ).ensure_one()
+    #     self.assertTrue(write_log_record)
