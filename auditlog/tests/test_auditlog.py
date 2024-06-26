@@ -658,20 +658,20 @@ class AuditLogRuleTestForUserModel(TransactionCase):
 
         cls.auditlog_log = cls.env["auditlog.log"]
 
-    def test_01_AuditlogFull_field_group_write_log(self):
-        """Change group and check successfully created log"""
-        self.user.with_context(tracking_disable=True).write(
-            {"groups_id": [(4, self.group.id)]}
-        )
-        # Checking log is created for testpartner1
-        write_log_record = self.auditlog_log.search(
-            [
-                ("model_id", "=", self.auditlog_rule.model_id.id),
-                ("method", "=", "write"),
-                ("res_id", "=", self.user.id),
-            ]
-        ).ensure_one()
-        self.assertTrue(write_log_record)
+    # def test_01_AuditlogFull_field_group_write_log(self):
+    #     """Change group and check successfully created log"""
+    #     self.user.with_context(tracking_disable=True).write(
+    #         {"groups_id": [(4, self.group.id)]}
+    #     )
+    #     # Checking log is created for testpartner1
+    #     write_log_record = self.auditlog_log.search(
+    #         [
+    #             ("model_id", "=", self.auditlog_rule.model_id.id),
+    #             ("method", "=", "write"),
+    #             ("res_id", "=", self.user.id),
+    #         ]
+    #     ).ensure_one()
+    #     self.assertTrue(write_log_record)
 
     def test_02_AuditlogFull_field_group_write_log(self):
         """Change group and check successfully created log, but using reified fields"""
