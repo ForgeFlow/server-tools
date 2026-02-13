@@ -20,14 +20,14 @@ class AttachMailManually(models.TransientModel):
     )
 
     @api.model
-    def _prepare_mail(self, folder, message_uid, mail_message):
+    def _prepare_mail(self, folder, msgid, mail_message):
         return {
-            "message_uid": message_uid,
+            "msgid": msgid,
             "subject": mail_message.get("subject", ""),
-            "date": mail_message.get("date") or False,
+            "date": mail_message.get("date", ""),
             "body": mail_message.get("body", ""),
             "email_from": mail_message.get("from", ""),
-            "object_id": f"{folder.model_id.model},-1",
+            "object_id": "%s,-1" % folder.model_id.model,
         }
 
     @api.model
@@ -43,11 +43,11 @@ class AttachMailManually(models.TransientModel):
         connection = folder.server_id.connect()
         connection.select(folder.path)
         criteria = "FLAGGED" if folder.flag_nonmatching else folder.get_criteria()
-        message_uids = folder.get_message_uids(connection, criteria)
-        for message_uid in message_uids[0].split():
-            mail_message, message_org = folder.fetch_msg(connection, message_uid)
+        msgids = folder.get_msgids(connection, criteria)
+        for msgid in msgids[0].split():
+            mail_message, message_org = folder.fetch_msg(connection, msgid)
             defaults["mail_ids"].append(
-                (0, 0, self._prepare_mail(folder, message_uid, mail_message))
+                (0, 0, self._prepare_mail(folder, msgid, mail_message))
             )
         connection.close()
         return defaults
@@ -61,11 +61,11 @@ class AttachMailManually(models.TransientModel):
         for mail in self.mail_ids:
             if not mail.object_id:
                 continue
-            message_uid = mail.message_uid
-            mail_message, message_org = folder.fetch_msg(connection, message_uid)
+            msgid = mail.msgid
+            mail_message, message_org = folder.fetch_msg(connection, msgid)
             folder.attach_mail(mail.object_id, mail_message)
             folder.update_msg(
-                connection, message_uid, matched=True, flagged=folder.flag_nonmatching
+                connection, msgid, matched=True, flagged=folder.flag_nonmatching
             )
         connection.close()
         return {"type": "ir.actions.act_window_close"}
@@ -97,7 +97,7 @@ class AttachMailManuallyMail(models.TransientModel):
     _description = __doc__
 
     wizard_id = fields.Many2one("fetchmail.attach.mail.manually", readonly=True)
-    message_uid = fields.Char("Message id", readonly=True)
+    msgid = fields.Char("Message id", readonly=True)
     subject = fields.Char(readonly=True)
     date = fields.Datetime(readonly=True)
     email_from = fields.Char("From", readonly=True)

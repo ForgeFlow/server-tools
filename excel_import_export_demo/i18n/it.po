@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-01-16 16:06+0000\n"
+"PO-Revision-Date: 2024-08-17 10:58+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: none\n"
 "Language: it\n"
@@ -86,7 +86,7 @@ msgstr "Conteggio modifiche dell'insieme di modifiche in attesa"
 #: model:ir.model.fields,field_description:excel_import_export_demo.field_report_partner_list__count_pending_changesets
 #: model:ir.model.fields,field_description:excel_import_export_demo.field_report_sale_order__count_pending_changesets
 msgid "Count Pending Changesets"
-msgstr "Conteggio insieme di modifiche in attesa"
+msgstr "Conta insiemi di modifiche in attesa"
 
 #. module: excel_import_export_demo
 #: model:ir.model.fields,field_description:excel_import_export_demo.field_report_crm_lead__create_uid
@@ -113,6 +113,12 @@ msgstr "Nome visualizzato"
 #: model_terms:ir.ui.view,arch_db:excel_import_export_demo.partner_list_wizard
 msgid "Execute"
 msgstr "Esegui"
+
+#. module: excel_import_export_demo
+#: model:ir.actions.act_window,name:excel_import_export_demo.action_purchase_order_export_xlsx
+#: model:ir.actions.act_window,name:excel_import_export_demo.action_sale_oder_export_xlsx
+msgid "Export Excel"
+msgstr "Esporta Excel"
 
 #. module: excel_import_export_demo
 #: model:ir.model.fields,field_description:excel_import_export_demo.field_report_crm_lead__data
@@ -293,6 +299,3 @@ msgstr "Procedura guidata per report.partner.list"
 #: model:ir.model,name:excel_import_export_demo.model_report_sale_order
 msgid "Wizard for report.sale.order"
 msgstr "Procedura guidata per report.sale.order"
-
-#~ msgid "Export Excel"
-#~ msgstr "Esporta Excel"

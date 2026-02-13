@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: server-tools (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-29 11:14+0000\n"
-"PO-Revision-Date: 2025-10-16 11:42+0000\n"
+"PO-Revision-Date: 2024-09-06 15:06+0000\n"
 "Last-Translator: mymage <stefano.consolaro@mymage.it>\n"
 "Language-Team: Italian (http://www.transifex.com/oca/OCA-server-tools-8-0/"
 "language/it/)\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.4\n"
+"X-Generator: Weblate 5.6.2\n"
 
 #. module: fetchmail_attach_from_folder
 #: model:ir.model.fields,field_description:fetchmail_attach_from_folder.field_fetchmail_server_folder__action_id
@@ -137,10 +137,9 @@ msgstr "Impossibile creare la cartella %(folder)s nel server %(server)s"
 #. odoo-python
 #: code:addons/fetchmail_attach_from_folder/models/fetchmail_server_folder.py:0
 #, python-format
-msgid ""
-"Could not fetch %(message_uid)s in folder %(folder)s on server %(server)s"
+msgid "Could not fetch %(msgid)s in folder %(folder)s on server %(server)s"
 msgstr ""
-"Impossibile recuperare %(message_uid)s nella cartella %(folder)s nel server "
+"Impossibile recuperare %(msgid)s nella cartella %(folder)s nel server "
 "%(server)s"
 
 #. module: fetchmail_attach_from_folder
@@ -208,8 +207,7 @@ msgstr "Data"
 #. module: fetchmail_attach_from_folder
 #: model:ir.model,name:fetchmail_attach_from_folder.model_fetchmail_server_folder
 msgid "Define folders (IMAP mailboxes) from which to fetch mail."
-msgstr ""
-"Definire le cartelle (cassette posta IMAP) dalle quali ricevere e-mail."
+msgstr "Definire le cartelle (cassette posta IMAP) dalle quali ricevere e-mail."
 
 #. module: fetchmail_attach_from_folder
 #: model:ir.model.fields,help:fetchmail_attach_from_folder.field_fetchmail_server_folder__delete_matching
@@ -316,7 +314,7 @@ msgstr "Cartelle da monitorare"
 #. module: fetchmail_attach_from_folder
 #: model:ir.model.fields,field_description:fetchmail_attach_from_folder.field_fetchmail_attach_mail_manually_mail__email_from
 msgid "From"
-msgstr "Da"
+msgstr "Dal"
 
 #. module: fetchmail_attach_from_folder
 #: model:ir.model.fields,field_description:fetchmail_attach_from_folder.field_fetchmail_attach_mail_manually__id
@@ -378,7 +376,7 @@ msgid "Match Algorithm"
 msgstr "Algoritmo di corrispondenza"
 
 #. module: fetchmail_attach_from_folder
-#: model:ir.model.fields,field_description:fetchmail_attach_from_folder.field_fetchmail_attach_mail_manually_mail__message_uid
+#: model:ir.model.fields,field_description:fetchmail_attach_from_folder.field_fetchmail_attach_mail_manually_mail__msgid
 msgid "Message id"
 msgstr "ID messaggio"
 
@@ -484,11 +482,6 @@ msgid "Server Type"
 msgstr "Tipo server"
 
 #. module: fetchmail_attach_from_folder
-#: model:ir.model.fields,field_description:fetchmail_attach_from_folder.field_fetchmail_server__server_type_env_default
-msgid "Server Type Env Default"
-msgstr "Tipo server ambiente predefinito"
-
-#. module: fetchmail_attach_from_folder
 #: model:ir.model.fields,field_description:fetchmail_attach_from_folder.field_fetchmail_attach_mail_manually__smart_search
 #: model:ir.model.fields,field_description:fetchmail_attach_from_folder.field_fetchmail_attach_mail_manually_mail__smart_search
 #: model:ir.model.fields,field_description:fetchmail_attach_from_folder.field_fetchmail_server__smart_search
@@ -557,7 +550,7 @@ msgstr "Numero di modifiche di questo record in attesa"
 #: model:ir.model.fields,help:fetchmail_attach_from_folder.field_fetchmail_server__count_pending_changesets
 #: model:ir.model.fields,help:fetchmail_attach_from_folder.field_fetchmail_server_folder__count_pending_changesets
 msgid "The number of pending changesets of this record"
-msgstr "Numero di insiemi di modifiche in attesa di questo record"
+msgstr "Numero di insieme di modifiche di questo record in attesa"
 
 #. module: fetchmail_attach_from_folder
 #: model:ir.model.fields,help:fetchmail_attach_from_folder.field_fetchmail_attach_mail_manually__count_changesets
@@ -570,11 +563,11 @@ msgstr "Numero totale di insiemi di modifiche di questo record"
 #. module: fetchmail_attach_from_folder
 #: model:ir.model.fields,help:fetchmail_attach_from_folder.field_fetchmail_server_folder__path
 msgid ""
-"The path to your mail folder. Typically would be something like "
-"'INBOX.myfolder'"
+"The path to your mail folder. Typically would be something like 'INBOX."
+"myfolder'"
 msgstr ""
-"Percorso alla cartella e-mail. Normalmente è qualcosa del tipo "
-"'INBOX.miacartella'"
+"Percorso alla cartella e-mail. Normalmente è qualcosa del tipo 'INBOX."
+"miacartella'"
 
 #. module: fetchmail_attach_from_folder
 #: model:ir.model.fields,help:fetchmail_attach_from_folder.field_fetchmail_server_folder__archive_path
@@ -637,9 +630,3 @@ msgstr "o"
 #: model_terms:ir.ui.view,arch_db:fetchmail_attach_from_folder.view_email_server_form
 msgid "to,from"
 msgstr "a,da"
-
-#, python-format
-#~ msgid "Could not fetch %(msgid)s in folder %(folder)s on server %(server)s"
-#~ msgstr ""
-#~ "Impossibile recuperare %(msgid)s nella cartella %(folder)s nel server "
-#~ "%(server)s"

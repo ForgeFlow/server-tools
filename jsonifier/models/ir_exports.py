@@ -109,8 +109,7 @@ class IrExports(models.Model):
                 if line.target:
                     names = line.target.split("/")
                 function = line.instance_method_name
-                # resolver must be passed as ID to avoid cache issues
-                options = {"resolver": line.resolver_id.id, "function": function}
+                options = {"resolver": line.resolver_id, "function": function}
                 update_dict(dict_parser, names, options)
             lang_parsers[lang] = convert_dict(dict_parser)
         if list(lang_parsers.keys()) == [False]:
@@ -118,7 +117,7 @@ class IrExports(models.Model):
         else:
             parser["langs"] = lang_parsers
         if self.global_resolver_id:
-            parser["resolver"] = self.global_resolver_id.id
+            parser["resolver"] = self.global_resolver_id
         if self.language_agnostic:
             parser["language_agnostic"] = self.language_agnostic
         return parser

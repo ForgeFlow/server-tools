@@ -49,22 +49,13 @@ class Base(models.AbstractModel):
         )
         for field_name, owner_field_name in self._tm_get_fields_to_notify():
             owner = self[field_name]
-            model_name = target_id = False
-            if isinstance(owner, models.BaseModel):
-                model_name = owner._name
-                target_id = owner.id
-            # In case of specific O2M (ex: ir.attachment with res_id)
-            elif isinstance(owner, int) and hasattr(self, "res_model"):
-                model_name = self.res_model
-                target_id = owner
-            if model_name and target_id:
-                data[model_name][target_id][owner_field_name].append(
-                    {
-                        "mode": mode,
-                        "record": self.display_name,
-                        "changes": changes,
-                    }
-                )
+            data[owner._name][owner.id][owner_field_name].append(
+                {
+                    "mode": mode,
+                    "record": self.display_name,
+                    "changes": changes,
+                }
+            )
 
     def _tm_get_field_description(self, field_name):
         return self._fields[field_name].get_description(self.env)["string"]
@@ -165,8 +156,8 @@ class Base(models.AbstractModel):
         return super().write(vals)
 
     @api.model_create_multi
-    def create(self, vals_list):
-        records = super().create(vals_list)
+    def create(self, list_vals):
+        records = super().create(list_vals)
         if self.is_tracked_by_o2m():
             records._tm_track_create_unlink("create")
         return records

@@ -10,15 +10,14 @@ msgstr ""
 "Project-Id-Version: Odoo Server 9.0c\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-12-29 03:39+0000\n"
-"PO-Revision-Date: 2025-02-24 12:06+0000\n"
-"Last-Translator: İsmail Çağan Yılmaz <ismail.cagan.yilmaz@gmail.com>\n"
+"PO-Revision-Date: 2016-12-29 03:39+0000\n"
+"Last-Translator: Ahmet Altinisik <aaltinisik@altinkaya.com.tr>, 2016\n"
 "Language-Team: Turkish (https://www.transifex.com/oca/teams/23907/tr/)\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Weblate 5.6.2\n"
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
@@ -26,8 +25,6 @@ msgid ""
 "<b>IMPORTANT:</b> Please note that enabling smart search may affect the "
 "performance of searches and the system in general."
 msgstr ""
-"<b>ÖNEMLİ:</b> Akıllı aramayı etkinleştirmenin, aramaların ve genel olarak "
-"sistemin performansını etkileyebileceğini lütfen unutmayın."
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
@@ -36,9 +33,6 @@ msgid ""
 "through the m2o/m2m widgets, for example when adding a Product in a Sales "
 "Order Line or when selecting a Contact in an Invoice."
 msgstr ""
-"<b>Akıllı Isim Arama</b>: m2o/m2m widget'lar aracılığıyla başka bir kayıt "
-"ararken, örneğin Satış Siparişi Satırına bir Ürün eklerken veya Faturada bir "
-"İlgili Kişi seçerken."
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
@@ -46,8 +40,6 @@ msgid ""
 "<b>Smart Search Fields</b>. You can define a set of fields by which we want "
 "to search"
 msgstr ""
-"<b>Akıllı Arama Alanları</b>. Arama yapmak istediğimiz bir dizi alan "
-"tanımlayabilirsiniz"
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
@@ -55,35 +47,33 @@ msgid ""
 "<b>Smart Search</b>: when searching in list, kanban and other views, the "
 "first option will be to search using \"Smart Search\""
 msgstr ""
-"<b>Akıllı Arama</b>: Liste, kanban ve diğer görünümlerde arama yaparken ilk "
-"seçenek \"Akıllı Arama\"yı kullanarak arama yapmak olacaktır"
 
 #. module: base_name_search_improved
 #: model:ir.model.fields,field_description:base_name_search_improved.field_ir_model__add_smart_search
 msgid "Add Smart Search"
-msgstr "Akıllı Arama Ekle"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model:ir.model.fields,help:base_name_search_improved.field_ir_model__add_smart_search
 msgid "Add Smart Search on search views"
-msgstr "Arama görünümlerine Akıllı Arama ekleyin"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model:ir.model,name:base_name_search_improved.model_base
 msgid "Base"
-msgstr "Temel"
+msgstr ""
 
 #. module: base_name_search_improved
 #. odoo-python
 #: code:addons/base_name_search_improved/models/ir_model.py:0
 #, python-format
 msgid "Couldn't eval Name Search Domain (%s)"
-msgstr "Isim Arama Etki Alanı (%s) değerlendirilemedi"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
 msgid "Custom Search"
-msgstr "Özel Arama"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
@@ -91,13 +81,11 @@ msgid ""
 "Define a <b>Smart Search Domain</b> (for example, only show internal users "
 "and not portal users)"
 msgstr ""
-"Bir <b>Akıllı Arama Etki Alanı</b> tanımlayın (örneğin, portal "
-"kullanıcılarını değil yalnızca dahili kullanıcıları gösterin)"
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_tree
 msgid "Domain"
-msgstr "Etki Alanı"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
@@ -116,18 +104,6 @@ msgid ""
 "                        By enabling Smart Search you can also add configure "
 "these two optional behaviours:"
 msgstr ""
-"\"Akıllı Arama\" etkinleştirilirse aramalar daha \"rahat\" bir davranışa "
-"sahip olacaktır. Odoo, girilen ifadeleri girilirken içeren kayıtları yerel "
-"olarak arar. Bu seçeneği etkinleştirdiğinizde, girilen sözcükleri içeren "
-"kayıtları, girilme sırasına bakılmaksızın arayacaktır. Örneğin, bir Kişi "
-"\"Fred Flinstone\" ismini ararsa, Odoo varsayılan olarak yalnızca tam olarak "
-"bu ifadeyi içeren kayıtları döndürür. Akıllı Arama etkin olduğunda, \"Fred\" "
-"ve \"Flinstone\" sözcüklerini içeren tüm kayıtlar döndürülür.\n"
-"                        <br/>\n"
-"                        <br/>\n"
-"\n"
-"                        Akıllı Aramayı etkinleştirerek şu iki isteğe bağlı "
-"davranışı da yapılandırabilirsiniz:"
 
 #. module: base_name_search_improved
 #: model:ir.model,name:base_name_search_improved.model_ir_model
@@ -139,24 +115,25 @@ msgstr "Modeller"
 #: code:addons/base_name_search_improved/models/ir_model.py:0
 #, python-format
 msgid "Name Search Domain must be a list of tuples"
-msgstr "Ad Arama Etki Alanı bir dizi listesi olmalıdır"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_tree
+#, fuzzy
 msgid "Search Fields"
-msgstr "Arama Alanları"
+msgstr "İsim Arama Alanları"
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_search
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_tree
 msgid "Smart Name Search"
-msgstr "Akıllı Isim Arama"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model:ir.model.fields,field_description:base_name_search_improved.field_ir_model__use_smart_name_search
 msgid "Smart Name Search Enabled?"
-msgstr "Akıllı Isim Arama Etkin mi?"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model:ir.model.fields,field_description:base_name_search_improved.field__unknown__smart_search
@@ -263,8 +240,6 @@ msgstr "Akıllı Isim Arama Etkin mi?"
 #: model:ir.model.fields,field_description:base_name_search_improved.field_base_import_tests_models_o2m__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_base_import_tests_models_o2m_child__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_base_import_tests_models_preview__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_base_kanban_abstract__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_base_kanban_stage__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_base_language_export__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_base_language_import__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_base_language_install__smart_search
@@ -394,7 +369,6 @@ msgstr "Akıllı Isim Arama Etkin mi?"
 #: model:ir.model.fields,field_description:base_name_search_improved.field_ir_ui_view__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_ir_ui_view_custom__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_ir_websocket__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_kpi_provider__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_activity__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_activity_mixin__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_activity_type__smart_search
@@ -419,8 +393,6 @@ msgstr "Akıllı Isim Arama Etkin mi?"
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_message_schedule__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_message_subtype__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_notification__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_performance_thread__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_performance_tracking__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_render_mixin__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_resend_message__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_resend_partner__smart_search
@@ -428,31 +400,6 @@ msgstr "Akıllı Isim Arama Etkin mi?"
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_template__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_template_preview__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_template_reset__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_access__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_access_custo__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_activity__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_cc__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_composer_mixin__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_composer_source__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_container__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_container_mc__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_field_type__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_gateway__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_gateway_groups__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_lang__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_multi_company__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_multi_company_read__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_multi_company_with_activity__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_nothread__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_simple__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_ticket__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_ticket_el__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_ticket_mc__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_track__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_track_all__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_track_compute__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_track_monetary__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_mail_test_track_selection__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_thread__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_thread_blacklist__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_mail_thread_cc__smart_search
@@ -498,7 +445,6 @@ msgstr "Akıllı Isim Arama Etkin mi?"
 #: model:ir.model.fields,field_description:base_name_search_improved.field_queue_job__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_queue_job_channel__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_queue_job_function__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_queue_job_lock__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_queue_jobs_to_cancelled__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_queue_jobs_to_done__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_queue_requeue_job__smart_search
@@ -575,12 +521,6 @@ msgstr "Akıllı Isim Arama Etkin mi?"
 #: model:ir.model.fields,field_description:base_name_search_improved.field_spreadsheet_dashboard__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_spreadsheet_dashboard_group__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_template_reset_mixin__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_test_performance_bacon__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_test_performance_base__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_test_performance_eggs__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_test_performance_line__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_test_performance_mozzarella__smart_search
-#: model:ir.model.fields,field_description:base_name_search_improved.field_test_performance_tag__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_uom_category__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_uom_uom__smart_search
 #: model:ir.model.fields,field_description:base_name_search_improved.field_utm_campaign__smart_search
@@ -598,39 +538,39 @@ msgstr "Akıllı Isim Arama Etkin mi?"
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_search
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_tree
 msgid "Smart Search"
-msgstr "Akıllı Arama"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
 msgid "Smart Search (search view)"
-msgstr "Akıllı Arama (arama görünümü)"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model:ir.model.fields,field_description:base_name_search_improved.field_ir_model__name_search_domain
 msgid "Smart Search Domain"
-msgstr "Akıllı Arama Etki Alanı"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model:ir.model.fields,field_description:base_name_search_improved.field_ir_model__name_search_ids
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
 msgid "Smart Search Fields"
-msgstr "Akıllı Arama Alanları"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model:ir.model.fields,field_description:base_name_search_improved.field_ir_model__smart_search_warning
 msgid "Smart Search Warning"
-msgstr "Akıllı Arama Uyarı"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model_terms:ir.ui.view,arch_db:base_name_search_improved.view_model_form_new
 msgid "Smart Search can be activated in two complementary ways:"
-msgstr "Akıllı Arama iki tamamlayıcı yolla etkinleştirilebilir:"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model:ir.actions.act_window,name:base_name_search_improved.action_improved_name_search
 #: model:ir.ui.menu,name:base_name_search_improved.menu_improved_name_search
 msgid "Smart Searches"
-msgstr "Akıllı Aramalar"
+msgstr ""
 
 #. module: base_name_search_improved
 #: model:ir.model.fields,help:base_name_search_improved.field_ir_model__use_smart_name_search
@@ -638,8 +578,6 @@ msgid ""
 "Use Smart Search for 'name_search', this will affect when searching from "
 "other records (for eg. from m2o fields"
 msgstr ""
-"'name_search' için Akıllı Arama'yı kullanın; bu, diğer kayıtlardan (örneğin "
-"m2o alanlarından) arama yapılmasını etkileyecektir"
 
 #, fuzzy
 #~ msgid "Custom Searches"

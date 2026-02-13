@@ -93,10 +93,4 @@ class UpgradeComparisonConfig(models.Model):
 
     def action_show_analysis(self):
         self.ensure_one()
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Analyses",
-            "res_model": "upgrade.analysis",
-            "view_mode": "tree,form",
-            "domain": [("id", "in", self.analysis_ids.ids)],
-        }
+        return {}
