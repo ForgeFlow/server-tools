@@ -2,6 +2,8 @@
 
 from odoo.tests.common import TransactionCase
 
+from ..models.auditlog_rule import PATCHED_METHODS
+
 
 class AuditLogRuleCommon(TransactionCase):
     """Rules must be subscribed in `setUp` or in the test itself, not in
@@ -25,7 +27,7 @@ class AuditLogRuleCommon(TransactionCase):
                 continue  # Preexisting rule for model not loaded yet
         # Assert no patched methods remain
         for model_class in self.env.registry.values():
-            for method in ["create", "read", "write", "unlink", "export_data"]:
+            for method in PATCHED_METHODS:
                 assert not hasattr(model_class, f"auditlog_ruled_{method}"), (
                     f"{model_class._name} {method} still patched"
                 )
