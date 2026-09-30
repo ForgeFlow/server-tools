@@ -291,6 +291,34 @@ class AuditlogCommon:
             1,
         )
 
+    def _search_group_logs(self, method, groups):
+        return self.env["auditlog.log"].search(
+            [
+                ("model_id", "=", self.groups_model_id),
+                ("method", "=", method),
+                ("res_id", "in", groups.ids),
+            ]
+        )
+
+    def test_LogRead(self):
+        """Tests read results"""
+        self.groups_rule.set_to_confirmed()
+        group = self.env["res.groups"].create({"name": "testgroup1"})
+        self.env["res.groups"].browse(group.id).read(["name"])
+        log = self._search_group_logs("read", group).ensure_one()
+        self.assertEqual(log.line_ids.mapped("field_name"), ["name"])
+
+    def test_LogSearchRead(self):
+        """Tests search_read results"""
+        self.groups_rule.set_to_confirmed()
+        groups = self.env["res.groups"].create(
+            [{"name": "testgroup1"}, {"name": "testgroup2"}]
+        )
+        self.env["res.groups"].search_read([("id", "in", groups.ids)], ["name"])
+        logs = self._search_group_logs("read", groups)
+        self.assertEqual(sorted(logs.mapped("res_id")), sorted(groups.ids))
+        self.assertEqual(set(logs.line_ids.mapped("field_name")), {"name"})
+
 
 class TestAuditlogFull(AuditLogRuleCommon, AuditlogCommon):
     @classmethod
