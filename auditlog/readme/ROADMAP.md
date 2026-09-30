@@ -1,4 +1,9 @@
 > - log only operations triggered by some users (currently it logs all
 >   users)
-> - log read operations does not work on all data models, need
->   investigation
+> - log grouped reads (`formatted_read_group`, used by grouped views,
+>   pivot and graph): grouping by a field returns all its distinct
+>   values, but no record ids, so these reads need logs that are not
+>   bound to a record
+> - log the other reads that do not go through `read`, `search_read` or
+>   `export_data`: `copy_data`, binary downloads, reports, and field
+>   values read directly on records
