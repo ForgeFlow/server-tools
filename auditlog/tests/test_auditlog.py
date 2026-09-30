@@ -319,6 +319,24 @@ class AuditlogCommon:
         self.assertEqual(sorted(logs.mapped("res_id")), sorted(groups.ids))
         self.assertEqual(set(logs.line_ids.mapped("field_name")), {"name"})
 
+    def test_LogReadFieldNames(self):
+        """Tests read results when only the field names are logged"""
+        comment_field = self.env.ref("base.field_res_groups__comment")
+        self.groups_rule.write(
+            {
+                "log_read_values": False,
+                "fields_to_exclude_ids": [Command.link(comment_field.id)],
+            }
+        )
+        self.groups_rule.set_to_confirmed()
+        group = self.env["res.groups"].create({"name": "testgroup1"})
+        self.env["res.groups"].browse(group.id).read(
+            ["name", "share", "comment", "create_date"]
+        )
+        log = self._search_group_logs("read", group).ensure_one()
+        self.assertFalse(log.line_ids)
+        self.assertEqual(log.read_field_names, "name, share")
+
 
 class TestAuditlogFull(AuditLogRuleCommon, AuditlogCommon):
     @classmethod

@@ -69,6 +69,11 @@
                         <group string="Logging">
                             <field name="log_create" readonly="state == 'confirmed'" />
                             <field name="log_read" readonly="state == 'confirmed'" />
+                            <field
+                                name="log_read_values"
+                                invisible="not log_read"
+                                readonly="state == 'confirmed'"
+                            />
                             <field name="log_write" readonly="state == 'confirmed'" />
                             <field name="log_unlink" readonly="state == 'confirmed'" />
                             <field
