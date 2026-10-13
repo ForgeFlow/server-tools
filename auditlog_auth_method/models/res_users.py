@@ -18,9 +18,9 @@ class ResUsers(models.Model):
         if request and user_agent_env and user_agent_env.get("interactive"):
             with cls.pool.cursor() as cr:
                 user = api.Environment(cr, SUPERUSER_ID, {})[cls._name].browse(uid)
-                request.session[
-                    "auditlog_auth_method"
-                ] = user._auditlog_get_login_auth_method(password)
+                request.session["auditlog_auth_method"] = (
+                    user._auditlog_get_login_auth_method(password)
+                )
                 request.session["auditlog_mfa_method"] = user._auditlog_get_mfa_method()
         return uid
 
