@@ -1,3 +1,7 @@
+.. image:: https://odoo-community.org/readme-banner-image
+   :target: https://odoo-community.org/get-involved?utm_source=readme
+   :alt: Odoo Community Association
+
 ===============================
 Audit Log Authentication Method
 ===============================
@@ -13,28 +17,29 @@ Audit Log Authentication Method
 .. |badge1| image:: https://img.shields.io/badge/maturity-Beta-yellow.png
     :target: https://odoo-community.org/page/development-status
     :alt: Beta
-.. |badge2| image:: https://img.shields.io/badge/licence-AGPL--3-blue.png
+.. |badge2| image:: https://img.shields.io/badge/license-AGPL--3-blue.png
     :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
     :alt: License: AGPL-3
 .. |badge3| image:: https://img.shields.io/badge/github-OCA%2Fserver--tools-lightgray.png?logo=github
-    :target: https://github.com/OCA/server-tools/tree/17.0/auditlog_auth_method
+    :target: https://github.com/OCA/server-tools/tree/19.0/auditlog_auth_method
     :alt: OCA/server-tools
 .. |badge4| image:: https://img.shields.io/badge/weblate-Translate%20me-F47D42.png
-    :target: https://translation.odoo-community.org/projects/server-tools-17-0/server-tools-17-0-auditlog_auth_method
+    :target: https://translation.odoo-community.org/projects/server-tools-19-0/server-tools-19-0-auditlog_auth_method
     :alt: Translate me on Weblate
 .. |badge5| image:: https://img.shields.io/badge/runboat-Try%20me-875A7B.png
-    :target: https://runboat.odoo-community.org/builds?repo=OCA/server-tools&target_branch=17.0
+    :target: https://runboat.odoo-community.org/builds?repo=OCA/server-tools&target_branch=19.0
     :alt: Try me on Runboat
 
 |badge1| |badge2| |badge3| |badge4| |badge5|
 
 This module extends **auditlog** to record on every log how the user
-authenticated: web session (password, OAuth, superuser mode), XML-RPC or
-JSON-RPC (password, API key, OAuth token), token route, public access or
-server-side code. Each rule can be limited to some of these methods, for
-example to audit only the operations done with an API key. RPC calls,
-which **auditlog** logs without an HTTP request, get one that keeps
-their path, client IP and user agent.
+authenticated: web session (password, OAuth, passkey, superuser mode),
+XML-RPC or JSON-RPC (password, API key, OAuth token), JSON-2 API (API
+key), token route, public access or server-side code. Each rule can be
+limited to some of these methods, for example to audit only the
+operations done with an API key. RPC calls, which **auditlog** logs
+without an HTTP request, get one that keeps their path, client IP and
+user agent.
 
 **Table of contents**
 
@@ -67,15 +72,13 @@ is logged as *Server side*.
 Known issues / Roadmap
 ======================
 
--  Tell LDAP logins apart from local password logins.
--  Tell trusted device logins apart from authenticator app codes.
--  Carry the authentication method of the user who enqueued a queue job
-   into the job execution.
--  Detect websocket (bus) requests, currently recorded as *Server side*.
--  Add bridge modules for non-default authentication methods, such as
-   ``auth_api_key``, ``auth_saml`` or ``auth_admin_passkey``.
--  Odoo 18.0: add the ``bearer`` route authentication and passkeys
-   (``auth_passkey``).
+- Tell LDAP logins apart from local password logins.
+- Tell trusted device logins apart from authenticator app codes.
+- Carry the authentication method of the user who enqueued a queue job
+  into the job execution.
+- Detect websocket (bus) requests, currently recorded as *Server side*.
+- Add bridge modules for non-default authentication methods, such as
+  ``auth_api_key``, ``auth_saml`` or ``auth_admin_passkey``.
 
 Bug Tracker
 ===========
@@ -83,7 +86,7 @@ Bug Tracker
 Bugs are tracked on `GitHub Issues <https://github.com/OCA/server-tools/issues>`_.
 In case of trouble, please check there if your issue has already been reported.
 If you spotted it first, help us to smash it by providing a detailed and welcomed
-`feedback <https://github.com/OCA/server-tools/issues/new?body=module:%20auditlog_auth_method%0Aversion:%2017.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
+`feedback <https://github.com/OCA/server-tools/issues/new?body=module:%20auditlog_auth_method%0Aversion:%2019.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.
 
 Do not contact contributors directly about support or help with technical issues.
 
@@ -98,9 +101,9 @@ Authors
 Contributors
 ------------
 
--  `ForgeFlow <https://www.forgeflow.com>`__:
+- `ForgeFlow <https://www.forgeflow.com>`__:
 
-   -  Guillem Casassas <guillem.casassas@forgeflow.com>
+  - Guillem Casassas <guillem.casassas@forgeflow.com>
 
 Maintainers
 -----------
@@ -123,6 +126,6 @@ Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
 |maintainer-GuillemCForgeFlow| 
 
-This module is part of the `OCA/server-tools <https://github.com/OCA/server-tools/tree/17.0/auditlog_auth_method>`_ project on GitHub.
+This module is part of the `OCA/server-tools <https://github.com/OCA/server-tools/tree/19.0/auditlog_auth_method>`_ project on GitHub.
 
 You are welcome to contribute. To learn how please visit https://odoo-community.org/page/Contribute.

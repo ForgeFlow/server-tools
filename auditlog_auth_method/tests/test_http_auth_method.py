@@ -1,7 +1,10 @@
 # Copyright 2026 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import json
+
 from odoo.tests import HttpCase, get_db_name, new_test_user, tagged
+from odoo.tools import mute_logger
 
 from odoo.addons.auditlog.tests.common import AuditLogRuleCommon
 
@@ -30,7 +33,8 @@ class TestAuditlogAuthMethodHttp(AuditLogRuleCommon, HttpCase):
         cls.api_key = (
             cls.env["res.users.apikeys"]
             .with_user(cls.user)
-            ._generate(None, "Integration key")
+            .sudo()
+            ._generate(None, "Integration key", None)
         )
         cls.rule = cls.create_rule(
             {
@@ -40,7 +44,7 @@ class TestAuditlogAuthMethodHttp(AuditLogRuleCommon, HttpCase):
                 "log_type": "full",
             }
         )
-        cls.rule.subscribe()
+        cls.rule.set_to_confirmed()
         # Existing instances
         cls.api_key_method = cls.env.ref("auditlog_auth_method.auth_method_rpc_api_key")
 
@@ -51,14 +55,15 @@ class TestAuditlogAuthMethodHttp(AuditLogRuleCommon, HttpCase):
     def _rpc_create(self, password, vals):
         if isinstance(vals, str):
             vals = {"name": vals}
-        return self.xmlrpc_object.execute_kw(
-            get_db_name(),
-            self.user.id,
-            password,
-            "res.partner.category",
-            "create",
-            [vals],
-        )
+        with mute_logger("odoo.addons.rpc.controllers.xmlrpc"):
+            return self.xmlrpc_object.execute_kw(
+                get_db_name(),
+                self.user.id,
+                password,
+                "res.partner.category",
+                "create",
+                [vals],
+            )
 
     def _web_login(self, user):
         self.make_jsonrpc_request(
@@ -76,6 +81,18 @@ class TestAuditlogAuthMethodHttp(AuditLogRuleCommon, HttpCase):
                 "kwargs": {},
             },
         )
+
+    def _json2_create(self, api_key, name):
+        response = self.url_open(
+            "/json/2/res.partner.category/create",
+            data=json.dumps({"vals_list": [{"name": name}]}),
+            headers={
+                "Authorization": f"bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+        )
+        response.raise_for_status()
+        return response.json()
 
     def _get_log(self, res_id):
         return self.Log.search(
@@ -114,6 +131,16 @@ class TestAuditlogAuthMethodHttp(AuditLogRuleCommon, HttpCase):
             self.assertEqual(log.auth_method_id.code, "rpc_api_key")
             self.assertEqual(log.auth_api_key_name, "Integration key")
             self.assertEqual(log.user_id, self.user)
+
+    def test_json2_api_key(self):
+        log = self._get_log(self._json2_create(self.api_key, "JSON-2 API key"))
+        self.assertEqual(log.auth_method_id.code, "rpc_api_key")
+        self.assertEqual(log.auth_api_key_name, "Integration key")
+        self.assertEqual(log.user_id, self.user)
+        self.assertEqual(
+            log.http_request_id.name, "/json/2/res.partner.category/create"
+        )
+        self.assertEqual(log.http_request_remote_addr, "127.0.0.1")
 
     def test_web_password(self):
         self._web_login(self.user)

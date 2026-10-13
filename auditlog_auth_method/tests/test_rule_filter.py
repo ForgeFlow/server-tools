@@ -39,7 +39,7 @@ class TestAuditlogRuleAuthMethod(AuditLogRuleCommon):
         )
 
     def test_log_without_filter(self):
-        self.rule.subscribe()
+        self.rule.set_to_confirmed()
         category = self.Category.create({"name": "No filter"})
         category.name = "No filter updated"
         logs = self._get_logs(category)
@@ -49,13 +49,13 @@ class TestAuditlogRuleAuthMethod(AuditLogRuleCommon):
 
     def test_log_filtered_in(self):
         self.rule.auth_method_ids = self.server_method
-        self.rule.subscribe()
+        self.rule.set_to_confirmed()
         category = self.Category.create({"name": "Filtered in"})
         self.assertEqual(self._get_logs(category).auth_method_id, self.server_method)
 
     def test_log_filtered_out(self):
         self.rule.auth_method_ids = self.api_key_method
-        self.rule.subscribe()
+        self.rule.set_to_confirmed()
         category = self.Category.create({"name": "Filtered out"})
         category.name = "Filtered out updated"
         category_id = category.id
@@ -66,9 +66,9 @@ class TestAuditlogRuleAuthMethod(AuditLogRuleCommon):
             )
         )
 
-    def test_filter_change_on_subscribed_rule(self):
+    def test_filter_change_on_confirmed_rule(self):
         self.rule.auth_method_ids = self.api_key_method
-        self.rule.subscribe()
+        self.rule.set_to_confirmed()
         filtered_out = self.Category.create({"name": "Before change"})
         self.rule.auth_method_ids |= self.server_method
         filtered_in = self.Category.create({"name": "After change"})
@@ -76,11 +76,11 @@ class TestAuditlogRuleAuthMethod(AuditLogRuleCommon):
         self.assertTrue(self._get_logs(filtered_in))
 
     def test_gate_keeps_method_attributes(self):
-        self.rule.unsubscribe()
+        self.rule.set_to_draft()
         model_class = type(self.Category)
         original_create = model_class.create
-        self.rule.subscribe()
-        self.assertEqual(model_class.create._api, "model_create")
+        self.rule.set_to_confirmed()
+        self.assertTrue(model_class.create._api_model)
         self.assertIs(model_class.create.origin, original_create)
-        self.rule.unsubscribe()
+        self.rule.set_to_draft()
         self.assertIs(model_class.create, original_create)

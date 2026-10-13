@@ -1,12 +1,15 @@
 # Copyright 2026 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+import re
+
 from odoo import SUPERUSER_ID, api, fields, models, tools
 from odoo.http import request
 
 from ..rpc import RPC_CALL
 
-STANDARD_ROUTE_AUTHS = ("user", "public", "none")
+STANDARD_ROUTE_AUTHS = ("user", "public", "none", "bearer")
+BEARER_TOKEN_RE = re.compile(r"^bearer\s+(.+)$", re.IGNORECASE)
 
 
 class AuditlogAuthMethod(models.Model):
@@ -19,13 +22,10 @@ class AuditlogAuthMethod(models.Model):
     sequence = fields.Integer(default=10)
     description = fields.Text(translate=True)
 
-    _sql_constraints = [
-        (
-            "code_uniq",
-            "unique(code)",
-            "The code of the authentication method must be unique.",
-        ),
-    ]
+    _code_uniq = models.Constraint(
+        "unique(code)",
+        "The code of the authentication method must be unique.",
+    )
 
     @api.model
     @tools.ormcache("code")
@@ -51,6 +51,13 @@ class AuditlogAuthMethod(models.Model):
         users = self.env["res.users"].sudo()
         session = request.session
         route_auth, route_uid = getattr(request, "_auditlog_route_auth", (None, None))
+        if route_auth == "bearer" and route_uid:
+            token = self._get_request_bearer_token()
+            if token:
+                code, api_key_name = users._auditlog_get_rpc_credential(
+                    route_uid, token
+                )
+                return code, None, api_key_name
         if (
             route_auth
             and route_auth not in STANDARD_ROUTE_AUTHS
@@ -69,3 +76,9 @@ class AuditlogAuthMethod(models.Model):
         if env and env.uid and users.browse(env.uid)._is_public():
             return "public", None, None
         return "server", None, None
+
+    @api.model
+    def _get_request_bearer_token(self):
+        header = request.httprequest.headers.get("Authorization") or ""
+        match = BEARER_TOKEN_RE.match(header)
+        return match.group(1) if match else None

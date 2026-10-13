@@ -34,7 +34,10 @@ class TestAuditlogAuthMethod(TransactionCase):
             cls.env, login="auditlog_auth_method_user", password=cls.password
         )
         cls.api_key = (
-            cls.env["res.users.apikeys"].with_user(cls.user)._generate(None, "Test key")
+            cls.env["res.users.apikeys"]
+            .with_user(cls.user)
+            .sudo()
+            ._generate(None, "Test key", None)
         )
         # Existing instances
         cls.public_user = cls.env.ref("base.public_user")
@@ -43,10 +46,13 @@ class TestAuditlogAuthMethod(TransactionCase):
         super().setUp()
         self.addCleanup(self.registry.clear_cache)
 
-    def _fake_request(self, session_uid=None, env_uid=None, route_auth=None, **values):
+    def _fake_request(
+        self, session_uid=None, env_uid=None, route_auth=None, headers=None, **values
+    ):
         return SimpleNamespace(
             session=FakeSession(uid=session_uid, **values),
             env=self.env(user=env_uid) if env_uid else None,
+            httprequest=SimpleNamespace(headers=headers or {}),
             _auditlog_route_auth=(route_auth, env_uid),
         )
 
@@ -139,6 +145,27 @@ class TestAuditlogAuthMethod(TransactionCase):
         fake_request = self._fake_request(env_uid=self.user.id, route_auth="outlook")
         self.assertEqual(self._get_auth_info(fake_request), ("route_token", None, None))
 
+    def test_bearer_api_key(self):
+        fake_request = self._fake_request(
+            env_uid=self.user.id,
+            route_auth="bearer",
+            headers={"Authorization": f"Bearer {self.api_key}"},
+        )
+        self.assertEqual(
+            self._get_auth_info(fake_request), ("rpc_api_key", None, "Test key")
+        )
+
+    def test_bearer_web_session(self):
+        fake_request = self._fake_request(
+            session_uid=self.user.id,
+            env_uid=self.user.id,
+            route_auth="bearer",
+            auditlog_auth_method="web_password",
+        )
+        self.assertEqual(
+            self._get_auth_info(fake_request), ("web_password", None, None)
+        )
+
     def test_server_auth_none_route(self):
         fake_request = self._fake_request(env_uid=self.user.id, route_auth="none")
         self.assertEqual(self._get_auth_info(fake_request), ("server", None, None))
@@ -147,32 +174,41 @@ class TestAuditlogAuthMethod(TransactionCase):
         fake_request = SimpleNamespace(session=FakeSession(), env=None)
         self.assertEqual(self._get_auth_info(fake_request), ("server", None, None))
 
+    def _login(self, interactive):
+        credential = {
+            "type": "password",
+            "login": self.user.login,
+            "password": self.password,
+        }
+        return self.ResUsers._login(credential, {"interactive": interactive})
+
     def test_login_stamps_session(self):
-        self.registry.enter_test_mode(self.env.cr)
-        self.addCleanup(self.registry.leave_test_mode)
         fake_request = SimpleNamespace(session=FakeSession())
         with patch(LOGIN_REQUEST, fake_request):
-            self.ResUsers._login(
-                self.env.cr.dbname,
-                self.user.login,
-                self.password,
-                {"interactive": True},
-            )
+            self._login(True)
         self.assertEqual(fake_request.session["auditlog_auth_method"], "web_password")
         self.assertEqual(fake_request.session["auditlog_mfa_method"], "none")
 
     def test_login_non_interactive_not_stamped(self):
-        self.registry.enter_test_mode(self.env.cr)
-        self.addCleanup(self.registry.leave_test_mode)
         fake_request = SimpleNamespace(session=FakeSession())
         with patch(LOGIN_REQUEST, fake_request):
-            self.ResUsers._login(
-                self.env.cr.dbname,
-                self.user.login,
-                self.password,
-                {"interactive": False},
-            )
+            self._login(False)
         self.assertFalse(fake_request.session)
+
+    def test_login_auth_method(self):
+        for auth_method, expected in (
+            ("password", "web_password"),
+            ("ldap", "web_password"),
+            ("oauth", "web_oauth"),
+            ("passkey", "web_passkey"),
+            ("custom", "web_unknown"),
+        ):
+            self.assertEqual(
+                self.user._auditlog_get_login_auth_method(
+                    {"uid": self.user.id, "auth_method": auth_method}
+                ),
+                expected,
+            )
 
     def test_mfa_method(self):
         users_class = type(self.ResUsers)

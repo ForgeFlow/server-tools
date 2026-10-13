@@ -50,13 +50,7 @@ def _get_rpc_http_info():
     }
 
 
-def patch_rpc_controller():
-    from odoo.addons.base.controllers import rpc as rpc_controller
-
-    dispatch_rpc = rpc_controller.dispatch_rpc
-    if getattr(dispatch_rpc, "_auditlog_auth_method", False):
-        return
-
+def _make_dispatch_rpc(dispatch_rpc):
     @functools.wraps(dispatch_rpc)
     def auditlog_dispatch_rpc(service_name, method, params):
         token = RPC_HTTP.set(_get_rpc_http_info())
@@ -66,5 +60,15 @@ def patch_rpc_controller():
             RPC_HTTP.reset(token)
 
     auditlog_dispatch_rpc._auditlog_auth_method = True
-    rpc_controller.dispatch_rpc = auditlog_dispatch_rpc
-    _logger.debug("PATCHED odoo.addons.base.controllers.rpc.dispatch_rpc")
+    return auditlog_dispatch_rpc
+
+
+def patch_rpc_controller():
+    from odoo.addons.rpc.controllers import jsonrpc, xmlrpc
+
+    for controller_module in (jsonrpc, xmlrpc):
+        dispatch_rpc = controller_module.dispatch_rpc
+        if getattr(dispatch_rpc, "_auditlog_auth_method", False):
+            continue
+        controller_module.dispatch_rpc = _make_dispatch_rpc(dispatch_rpc)
+        _logger.debug("PATCHED %s.dispatch_rpc", controller_module.__name__)

@@ -67,7 +67,7 @@ class AuditlogRule(models.Model):
 
         @functools.wraps(audited)
         def gate(records, *args, **kwargs):
-            if records.env.context.get("auditlog_disabled") or records.env[
+            if records.env.context.get("auditlog_disabled_read") or records.env[
                 "auditlog.rule"
             ].sudo()._auth_method_allows(records._name):
                 return audited(records, *args, **kwargs)

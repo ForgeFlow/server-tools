@@ -18,6 +18,12 @@
             name="description"
         >Session opened through an OAuth provider (auth_oauth).</field>
     </record>
+    <record id="auth_method_web_passkey" model="auditlog.auth.method">
+        <field name="name">Web session: passkey</field>
+        <field name="code">web_passkey</field>
+        <field name="sequence">25</field>
+        <field name="description">Session opened with a passkey (auth_passkey).</field>
+    </record>
     <record id="auth_method_web_superuser" model="auditlog.auth.method">
         <field name="name">Web session: superuser mode</field>
         <field name="code">web_superuser</field>
@@ -32,7 +38,7 @@
         <field name="sequence">40</field>
         <field
             name="description"
-        >Session whose login method was not recorded, e.g. opened before this module was installed.</field>
+        >Session whose login method was not recorded, e.g. opened before this module was installed, or opened with a method this module does not know.</field>
     </record>
     <record id="auth_method_rpc_password" model="auditlog.auth.method">
         <field name="name">External RPC: password</field>
@@ -48,7 +54,7 @@
         <field name="sequence">60</field>
         <field
             name="description"
-        >XML-RPC or JSON-RPC call authenticated with a user API key.</field>
+        >XML-RPC or JSON-RPC call, or JSON-2 API call (/json/2), authenticated with a user API key.</field>
     </record>
     <record id="auth_method_rpc_oauth" model="auditlog.auth.method">
         <field name="name">External RPC: OAuth token</field>

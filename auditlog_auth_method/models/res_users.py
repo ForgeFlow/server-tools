@@ -1,34 +1,37 @@
 # Copyright 2026 ForgeFlow S.L. (https://www.forgeflow.com)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from odoo import SUPERUSER_ID, api, models, tools
+from odoo import api, models, tools
 from odoo.http import request
 
 from odoo.addons.base.models.res_users import INDEX_SIZE, KEY_CRYPT_CONTEXT
 
 from .auditlog_log import MFA_METHODS
 
+LOGIN_AUTH_METHODS = {
+    "password": "web_password",
+    "ldap": "web_password",
+    "oauth": "web_oauth",
+    "passkey": "web_passkey",
+}
+
 
 class ResUsers(models.Model):
     _inherit = "res.users"
 
-    @classmethod
-    def _login(cls, db, login, password, user_agent_env):
-        uid = super()._login(db, login, password, user_agent_env=user_agent_env)
+    def _login(self, credential, user_agent_env):
+        auth_info = super()._login(credential, user_agent_env=user_agent_env)
         if request and user_agent_env and user_agent_env.get("interactive"):
-            with cls.pool.cursor() as cr:
-                user = api.Environment(cr, SUPERUSER_ID, {})[cls._name].browse(uid)
-                request.session["auditlog_auth_method"] = (
-                    user._auditlog_get_login_auth_method(password)
-                )
-                request.session["auditlog_mfa_method"] = user._auditlog_get_mfa_method()
-        return uid
+            user = self.sudo().browse(auth_info["uid"])
+            request.session["auditlog_auth_method"] = (
+                user._auditlog_get_login_auth_method(auth_info)
+            )
+            request.session["auditlog_mfa_method"] = user._auditlog_get_mfa_method()
+        return auth_info
 
-    def _auditlog_get_login_auth_method(self, password):
+    def _auditlog_get_login_auth_method(self, auth_info):
         self.ensure_one()
-        if self._auditlog_is_oauth_access_token(password):
-            return "web_oauth"
-        return "web_password"
+        return LOGIN_AUTH_METHODS.get(auth_info.get("auth_method"), "web_unknown")
 
     def _auditlog_get_mfa_method(self):
         self.ensure_one()
@@ -57,6 +60,10 @@ class ResUsers(models.Model):
             WHERE user_id = %s
                 AND index = %s
                 AND (scope IS NULL OR scope = 'rpc')
+                AND (
+                    expiration_date IS NULL
+                    OR expiration_date >= now() at time zone 'utc'
+                )
             """,
             (uid, passwd[:INDEX_SIZE]),
         )
