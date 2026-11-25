@@ -71,6 +71,9 @@ smaller, and it keeps sensitive values out of the logs: users who can
 open the logs of a record would otherwise see the values of fields they
 are not allowed to read on the record itself.
 
+Read logs never store the content of binary fields, such as the file of
+an attachment: their lines hold ``[binary]`` instead.
+
 Data exports (the *Export* action and the ``export_data`` method) are
 logged by *Log Exports*, with one log per export that lists the exported
 records and, in *Fields Read*, the exported fields. Exports never store
@@ -81,8 +84,8 @@ Read logs without values and export logs have no lines, so they are not
 listed in the *Log Lines* menu.
 
 With a *Full log* rule, a creation log stores only the fields that have
-a value: empty fields (False, 0, empty text or relation) are not logged,
-except boolean fields.
+a value: empty fields (False, empty text or relation) are not logged,
+except boolean and numeric fields, whose False or 0 is a value.
 
 A scheduled action exists to delete logs older than 6 months (180 days)
 periodically but is not enabled by default. To activate it and/or change
@@ -113,10 +116,10 @@ Known issues / Roadmap
 
    - log only operations triggered by some users (currently it logs all
      users)
-   - log grouped reads (``formatted_read_group``, used by grouped
-     views, pivot and graph): grouping by a field returns all its
-     distinct values, but no record ids, so these reads need logs that
-     are not bound to a record
+   - log grouped reads (``formatted_read_group``, used by grouped views,
+     pivot and graph): grouping by a field returns all its distinct
+     values, but no record ids, so these reads need logs that are not
+     bound to a record
    - log the other reads that do not go through ``read``,
      ``search_read`` or ``export_data``: ``copy_data``, binary
      downloads, reports, and field values read directly on records
